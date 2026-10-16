@@ -1,0 +1,345 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Portfolio | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .portfolio-content {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .portfolio-eyebrow {
+            color: #9b8cff;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+        }
+
+        .portfolio-content h1 {
+            color: #f4f5ff;
+            font-size: clamp(30px, 4vw, 42px);
+            margin: 0 0 14px;
+        }
+
+        .portfolio-description {
+            color: #aab4cb;
+            line-height: 1.8;
+            max-width: 680px;
+            margin-bottom: 30px;
+        }
+
+        .portfolio-card {
+            background: rgba(19, 25, 45, 0.92);
+            border: 1px solid rgba(151, 142, 255, 0.2);
+            border-radius: 20px;
+            padding: 28px;
+            margin-bottom: 24px;
+            min-width: 0;
+        }
+
+        .portfolio-card h2 {
+            color: #f4f5ff;
+            margin: 0 0 14px;
+            font-size: 22px;
+        }
+
+        .portfolio-card p {
+            color: #aab4cb;
+            line-height: 1.8;
+        }
+
+        .portfolio-style {
+            display: inline-block;
+            padding: 8px 14px;
+            border-radius: 30px;
+            color: #c9c0ff;
+            background: rgba(117, 103, 255, 0.15);
+            border: 1px solid rgba(151, 142, 255, 0.3);
+            font-size: 13px;
+            font-weight: 600;
+            margin: 4px 0 16px;
+        }
+
+        .portfolio-preview {
+            min-height: 230px;
+            padding: 28px;
+            border-radius: 16px;
+            border: 1px dashed rgba(151, 142, 255, 0.4);
+            background: rgba(9, 13, 27, 0.65);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .portfolio-preview h3 {
+            color: #f4f5ff;
+            font-size: 25px;
+            margin: 0 0 12px;
+        }
+
+        .portfolio-preview p {
+            max-width: 500px;
+            margin: 0;
+        }
+
+        .portfolio-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .portfolio-button {
+            display: inline-block;
+            text-decoration: none;
+            border: 1px solid rgba(151, 142, 255, 0.35);
+            background: #7567ff;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .portfolio-button.secondary {
+            background: transparent;
+            color: #d4d8eb;
+        }
+
+        .portfolio-button:hover {
+            opacity: 0.88;
+        }
+
+        .portfolio-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 20px;
+        }
+
+        .portfolio-feature {
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid rgba(151, 142, 255, 0.16);
+            background: rgba(255, 255, 255, 0.025);
+        }
+
+        .portfolio-feature h3 {
+            color: #f4f5ff;
+            font-size: 16px;
+            margin: 0 0 10px;
+        }
+
+        .portfolio-feature p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        @media (max-width: 850px) {
+            .portfolio-feature-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .portfolio-feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .portfolio-card {
+                padding: 20px;
+            }
+
+            .portfolio-preview {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-page">
+
+    <div class="dashboard-layout">
+
+        <aside class="dashboard-sidebar sidebar">
+
+            <div class="sidebar-logo">
+                Persona<span>Forge</span><small>AI</small>
+            </div>
+
+            <p>WORKSPACE</p>
+
+            <nav>
+                <a href="{{ url_for('dashboard') }}">Dashboard</a>
+                <a href="{{ url_for('interview') }}">AI Interview</a>
+                <a href="{{ url_for('profile') }}">My Profile</a>
+                <a href="{{ url_for('generator') }}">AI Generator</a>
+                <a href="{{ url_for('brandmind') }}">BrandMind AI</a>
+                <a href="{{ url_for('portfolio') }}" class="active">Portfolio</a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <a href="{{ url_for('index') }}">Back to Home</a>
+            </div>
+
+        </aside>
+
+        <main class="dashboard-main">
+
+            {% set current_brand = selected_brand|default('', true) %}
+
+            <section class="portfolio-content">
+
+                <p class="portfolio-eyebrow">
+                    YOUR PROFESSIONAL PRESENCE
+                </p>
+
+                <h1>Portfolio Studio</h1>
+
+                <p class="portfolio-description">
+                    Build a professional portfolio that showcases your
+                    skills, projects, education, and career journey in one place.
+                </p>
+
+                <div class="portfolio-card">
+
+                    <h2>Your Portfolio Identity</h2>
+
+                    {% if current_brand %}
+                        <span class="portfolio-style">
+                            {{ current_brand }} Style
+                        </span>
+
+                        <p>
+                            Your portfolio is set to the
+                            <strong>{{ current_brand }}</strong> visual style
+                            selected in BrandMind AI.
+                        </p>
+                    {% else %}
+                        <p>
+                            You have not selected a brand style yet.
+                            Choose a style in BrandMind AI to personalize
+                            your portfolio.
+                        </p>
+
+                        <div class="portfolio-actions">
+                            <a class="portfolio-button"
+                               href="{{ url_for('brandmind') }}">
+                                Choose Brand Style
+                            </a>
+                        </div>
+                    {% endif %}
+
+                </div>
+
+                <div class="portfolio-card">
+
+                    <h2>Live Portfolio Preview</h2>
+
+                    <div class="portfolio-preview">
+
+                        <p class="portfolio-eyebrow">
+                            PERSONAFORGE AI
+                        </p>
+
+                        <h3>
+                            {% if current_brand %}
+                                {{ current_brand }} Portfolio
+                            {% else %}
+                                Your Professional Portfolio
+                            {% endif %}
+                        </h3>
+
+                        <p>
+                            Your skills, projects, achievements, and
+                            professional story — presented in one place.
+                        </p>
+
+                    </div>
+
+                    <div class="portfolio-actions">
+                        <a class="portfolio-button"
+                           href="{{ url_for('profile') }}">
+                            View My Profile
+                        </a>
+
+                        <a class="portfolio-button secondary"
+                           href="{{ url_for('generator') }}">
+                            Generate Content
+                        </a>
+
+                        <a class="portfolio-button secondary"
+                           href="{{ url_for('brandmind') }}">
+                            Change Brand Style
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="portfolio-card">
+
+                    <h2>What Your Portfolio Can Showcase</h2>
+
+                    <div class="portfolio-feature-grid">
+
+                        <div class="portfolio-feature">
+                            <h3>01 · About Me</h3>
+                            <p>
+                                Introduce yourself, your education,
+                                interests, and career goals.
+                            </p>
+                        </div>
+
+                        <div class="portfolio-feature">
+                            <h3>02 · Skills</h3>
+                            <p>
+                                Highlight your technical skills,
+                                strengths, and areas of expertise.
+                            </p>
+                        </div>
+
+                        <div class="portfolio-feature">
+                            <h3>03 · Projects</h3>
+                            <p>
+                                Present your academic projects,
+                                personal work, and accomplishments.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="portfolio-card">
+
+                    <h2>Portfolio Status</h2>
+
+                    <p>
+                        This page is your portfolio workspace and preview.
+                        Full public portfolio publishing and live deployment
+                        still need to be implemented separately.
+                    </p>
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+</html>

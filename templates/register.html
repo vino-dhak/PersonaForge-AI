@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Segoe UI", Arial, sans-serif;
+            color: #f7f8ff;
+            background:
+                radial-gradient(ellipse at 15% 15%, rgba(65, 101, 255, .17), transparent 42%),
+                radial-gradient(ellipse at 85% 85%, rgba(119, 65, 255, .13), transparent 40%),
+                #080b16;
+        }
+
+        .topbar {
+            min-height: 75px;
+            padding: 18px 7%;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #20283b;
+        }
+
+        .logo {
+            color: white;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #54e5ff;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .layout {
+            width: min(1100px, 90%);
+            min-height: calc(100vh - 75px);
+            margin: auto;
+            padding: 45px 0;
+            display: grid;
+            grid-template-columns: 1fr .85fr;
+            align-items: center;
+            gap: 65px;
+        }
+
+        .intro .eyebrow {
+            margin-bottom: 20px;
+            color: #54e5ff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .intro h1 {
+            margin-bottom: 20px;
+            font-size: clamp(35px, 4vw, 52px);
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+        }
+
+        .intro h1 span {
+            color: #54e5ff;
+        }
+
+        .intro > p {
+            max-width: 440px;
+            color: #a5aec3;
+            font-size: 16px;
+            line-height: 1.9;
+        }
+
+        .feature {
+            margin-top: 30px;
+            padding: 22px;
+            background: #101626;
+            border: 1px solid #263149;
+            border-radius: 15px;
+        }
+
+        .feature h3 {
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        .feature p {
+            color: #a5aec3;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .register-card {
+            width: 100%;
+            padding: 36px;
+            background: rgba(16, 22, 38, .96);
+            border: 1px solid #263149;
+            border-radius: 22px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, .3);
+        }
+
+        .card-label {
+            margin-bottom: 12px;
+            color: #54e5ff;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .register-card h2 {
+            margin-bottom: 9px;
+            font-size: 29px;
+        }
+
+        .subtitle {
+            margin-bottom: 25px;
+            color: #a5aec3;
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e3e9f8;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 48px;
+            padding: 0 14px;
+            color: white;
+            background: #080d1a;
+            border: 1px solid #303b55;
+            border-radius: 9px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .form-group input::placeholder {
+            color: #758099;
+        }
+
+        .form-group input:focus {
+            border-color: #5b8cff;
+            box-shadow: 0 0 0 3px rgba(91, 140, 255, .13);
+        }
+
+        .submit-button {
+            width: 100%;
+            min-height: 49px;
+            margin-top: 5px;
+            color: white;
+            background: linear-gradient(110deg, #477aff, #795bff);
+            border: none;
+            border-radius: 9px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s ease;
+        }
+
+        .submit-button:hover {
+            filter: brightness(1.12);
+            transform: translateY(-2px);
+        }
+
+        .message {
+            margin-bottom: 18px;
+            padding: 12px;
+            border-radius: 9px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .error {
+            color: #ffb4bf;
+            background: rgba(255, 90, 120, .1);
+            border: 1px solid rgba(255, 90, 120, .3);
+        }
+
+        .success {
+            color: #9af3ce;
+            background: rgba(67, 217, 163, .08);
+            border: 1px solid rgba(67, 217, 163, .25);
+        }
+
+        .switch-text {
+            margin-top: 23px;
+            color: #a5aec3;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .switch-text a,
+        .back-home {
+            color: #54e5ff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .switch-text a:hover,
+        .back-home:hover {
+            text-decoration: underline;
+        }
+
+        .back-home {
+            display: inline-block;
+            margin-top: 22px;
+            color: #a5aec3;
+            font-size: 13px;
+            font-weight: 400;
+        }
+
+        @media (max-width: 760px) {
+            .layout {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 35px 0;
+            }
+
+            .intro h1 {
+                font-size: 36px;
+            }
+
+            .register-card {
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .register-card {
+                padding: 20px;
+            }
+
+            .register-card h2 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="topbar">
+        <a class="logo" href="{{ url_for('index') }}">
+            PersonaForge <span>AI</span>
+        </a>
+    </header>
+
+    <main class="layout">
+
+        <section class="intro">
+            <div class="eyebrow">WELCOME TO PERSONAFORGE AI</div>
+
+            <h1>
+                Build your identity.<br>
+                <span>Shape your future.</span>
+            </h1>
+
+            <p>
+                Create your professional account and start building
+                your personal brand. Bring your skills, education,
+                projects and career goals together in one place.
+            </p>
+
+            <div class="feature">
+                <h3>✦ One account. Your professional future.</h3>
+                <p>
+                    Create your profile, prepare professional content
+                    and build your portfolio with PersonaForge AI.
+                </p>
+            </div>
+        </section>
+
+        <section class="register-card">
+
+            <div class="card-label">GET STARTED</div>
+
+            <h2>Create your account</h2>
+
+            <p class="subtitle">
+                Enter your details below to get started.
+            </p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="message {{ 'success' if category == 'success' else 'error' }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if error %}
+                <div class="message error">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            <form method="POST" action="{{ url_for('register') }}">
+
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        placeholder="Enter your email"
+                        autocomplete="email"
+                        value="{{ request.form.get('email', '') }}"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Create a password (minimum 8 characters)"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="confirm_password">Confirm password</label>
+                    <input
+                        type="password"
+                        id="confirm_password"
+                        name="confirm_password"
+                        placeholder="Enter your password again"
+                        minlength="8"
+                        autocomplete="new-password"
+                        required>
+                </div>
+
+                <button type="submit" class="submit-button">
+                    Create Account &nbsp; →
+                </button>
+
+            </form>
+
+            <div class="switch-text">
+                Already have an account?
+                <a href="{{ url_for('login') }}">Sign in</a>
+            </div>
+
+            <a class="back-home" href="{{ url_for('index') }}">
+                ← Back to Home
+            </a>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

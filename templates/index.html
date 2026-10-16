@@ -1,0 +1,190 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PersonaForge AI | Build Your Professional Identity</title>
+
+    <!-- Connect the existing Flask CSS file -->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="landing-page">
+
+    <header class="landing-header">
+        <a href="{{ url_for('index') }}" class="logo">
+            Persona<span>Forge</span><small>AI</small>
+        </a>
+
+        <nav class="landing-nav">
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+            <a href="{{ url_for('login') }}" class="nav-login">Login</a>
+            <a href="{{ url_for('register') }}" class="nav-register">
+                Get Started
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero-section" id="about">
+            <div class="hero-content">
+                <p class="hero-label">AI-POWERED PERSONAL BRANDING</p>
+
+                <h1>
+                    Your story.<br>
+                    Your identity.<br>
+                    <span>Your future.</span>
+                </h1>
+
+                <p class="hero-description">
+                    Turn your skills, education, projects and ambitions
+                    into a professional identity with PersonaForge AI.
+                    Create your resume, LinkedIn content, GitHub README
+                    and personal portfolio in one place.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{{ url_for('register') }}"
+                       class="primary-button">
+                        Get Started Free
+                    </a>
+
+                    <a href="{{ url_for('login') }}"
+                       class="secondary-button">
+                        Sign In
+                    </a>
+                </div>
+
+                <p class="hero-note">
+                    Designed for students, graduates and job seekers.
+                </p>
+            </div>
+
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-top">
+                        <span class="status-dot"></span>
+                        YOUR PROFESSIONAL IDENTITY
+                    </div>
+
+                    <div class="profile-symbol">PF</div>
+
+                    <h2>Your Potential, Professionally Presented.</h2>
+
+                    <p>
+                        One story. Multiple professional possibilities.
+                    </p>
+
+                    <div class="preview-tags">
+                        <span>Resume</span>
+                        <span>LinkedIn</span>
+                        <span>GitHub</span>
+                        <span>Portfolio</span>
+                    </div>
+
+                    <div class="preview-line"></div>
+
+                    <div class="preview-footer">
+                        <span>PERSONAFORGE AI</span>
+                        <span>01 / 04</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="features-section" id="features">
+            <div class="section-heading">
+                <p class="hero-label">WHAT YOU CAN CREATE</p>
+                <h2>Everything your professional story needs.</h2>
+                <p>
+                    Build and manage your personal brand from one workspace.
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <article class="feature-card">
+                    <div class="feature-icon">01</div>
+                    <h3>AI Career Interview</h3>
+                    <p>
+                        Share your education, skills, projects and goals
+                        through a guided interview.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">02</div>
+                    <h3>Resume Generator</h3>
+                    <p>
+                        Organize your professional details into a clear,
+                        structured resume draft.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">03</div>
+                    <h3>LinkedIn Content</h3>
+                    <p>
+                        Create a professional About section using the
+                        information you provide.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">04</div>
+                    <h3>GitHub README</h3>
+                    <p>
+                        Present your skills, projects and career interests
+                        on your developer profile.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">05</div>
+                    <h3>BrandMind AI</h3>
+                    <p>
+                        Choose a personal branding direction that suits
+                        your professional goals.
+                    </p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="feature-icon">06</div>
+                    <h3>Portfolio Builder</h3>
+                    <p>
+                        Bring your professional information together in
+                        a personal portfolio workspace.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <p class="hero-label">YOUR NEXT CHAPTER STARTS HERE</p>
+
+            <h2>Ready to build your professional identity?</h2>
+
+            <p>
+                Start with your story and shape the way the world sees you.
+            </p>
+
+            <a href="{{ url_for('register') }}" class="primary-button">
+                Create Your Account
+            </a>
+        </section>
+    </main>
+
+    <footer class="landing-footer">
+        <a href="{{ url_for('index') }}" class="logo">
+            Persona<span>Forge</span><small>AI</small>
+        </a>
+
+        <p>AI-powered personal branding platform.</p>
+        <p>&copy; 2026 PersonaForge AI. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

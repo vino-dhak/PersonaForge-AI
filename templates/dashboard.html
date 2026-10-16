@@ -1,0 +1,821 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | PersonaForge AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #080b16;
+            color: #f5f7ff;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            flex: 0 0 250px;
+            width: 250px;
+            min-height: 100vh;
+            padding: 28px 18px 20px;
+            display: flex;
+            flex-direction: column;
+            background: #0d1220;
+            border-right: 1px solid #20283b;
+        }
+
+        .dashboard-logo {
+            display: block;
+            margin: 0 10px 42px;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .dashboard-logo span,
+        .dashboard-logo small {
+            color: #54e5ff;
+        }
+
+        .dashboard-logo small {
+            margin-left: 3px;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-section {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .sidebar-title {
+            margin: 0 12px 10px;
+            color: #8995ad;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 46px;
+            padding: 12px;
+            border: 1px solid transparent;
+            border-radius: 10px;
+            color: #aab4ca;
+            font-size: 14px;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .sidebar-link > span {
+            width: 20px;
+            color: #9ca9c1;
+            text-align: center;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #1c1c40;
+            color: #fff;
+        }
+
+        .sidebar-link.active {
+            border-color: #292957;
+        }
+
+        .sidebar-link:hover > span,
+        .sidebar-link.active > span {
+            color: #54e5ff;
+        }
+
+        .sidebar-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-top: auto;
+            padding-top: 30px;
+        }
+
+        .logout-link:hover {
+            color: #ff9da9;
+        }
+
+        /* MAIN CONTENT */
+        .dashboard-main {
+            flex: 1;
+            min-width: 0;
+            padding: 38px;
+            overflow-wrap: anywhere;
+        }
+
+        .dashboard-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-eyebrow,
+        .card-label {
+            display: inline-block;
+            color: #54e5ff;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+        }
+
+        .dashboard-topbar h1 {
+            margin: 12px 0;
+            font-size: clamp(27px, 3vw, 39px);
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .dashboard-topbar h1 span {
+            color: #54e5ff;
+        }
+
+        .dashboard-topbar p,
+        .progress-info p,
+        .dashboard-feature-content p,
+        .dashboard-tip p {
+            color: #9da9c1;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .dashboard-topbar p {
+            max-width: 600px;
+            margin: 0;
+        }
+
+        .dashboard-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            padding: 12px 15px;
+            background: #101626;
+            border: 1px solid #263149;
+            border-radius: 12px;
+        }
+
+        .profile-circle {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #477aff, #795bff);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .dashboard-profile strong,
+        .dashboard-profile small {
+            display: block;
+        }
+
+        .dashboard-profile strong {
+            max-width: 180px;
+            font-size: 13px;
+            overflow-wrap: anywhere;
+        }
+
+        .dashboard-profile small {
+            margin-top: 5px;
+            color: #9da9c1;
+            font-size: 11px;
+        }
+
+        /* FLASH MESSAGES */
+        .flash-message {
+            margin-bottom: 16px;
+            padding: 12px 15px;
+            border: 1px solid #2d8069;
+            border-radius: 9px;
+            background: #10251f;
+            color: #9af3ce;
+            font-size: 13px;
+        }
+
+        .flash-message.error {
+            border-color: #93475a;
+            background: #30151f;
+            color: #ffb4c0;
+        }
+
+        /* PROFILE PROGRESS */
+        .profile-progress-card {
+            margin-bottom: 35px;
+            padding: 27px;
+            background: linear-gradient(115deg, #191b43, #11192b 80%);
+            border: 1px solid #303064;
+            border-radius: 17px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .progress-info h2 {
+            margin: 12px 0 9px;
+            font-size: 22px;
+        }
+
+        .progress-info p {
+            margin: 0;
+        }
+
+        .progress-percentage {
+            flex-shrink: 0;
+            color: #54e5ff;
+            font-size: 35px;
+            font-weight: 800;
+        }
+
+        .progress-percentage span {
+            font-size: 19px;
+        }
+
+        .dashboard-progress-bar {
+            height: 7px;
+            margin-top: 24px;
+            overflow: hidden;
+            background: #272d49;
+            border-radius: 20px;
+        }
+
+        .dashboard-progress-fill {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #54e5ff, #795bff);
+            border-radius: inherit;
+        }
+
+        .progress-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 13px;
+            color: #9da9c1;
+            font-size: 12px;
+        }
+
+        .progress-footer a {
+            color: #54e5ff;
+            font-weight: 700;
+        }
+
+        /* SECTION HEADINGS */
+        .dashboard-heading {
+            margin: 32px 0 18px;
+        }
+
+        .dashboard-heading h2 {
+            margin: 9px 0 0;
+            font-size: 22px;
+        }
+
+        /* FEATURE CARDS */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .dashboard-feature {
+            display: flex;
+            flex-direction: column;
+            min-height: 260px;
+            padding: 23px;
+            background: #101626;
+            border: 1px solid #263149;
+            border-radius: 15px;
+            color: #f5f7ff;
+            transition: transform 0.2s ease,
+                        border-color 0.2s ease,
+                        background 0.2s ease;
+        }
+
+        .dashboard-feature:hover {
+            transform: translateY(-3px);
+            background: #141b2d;
+            border-color: #5556a1;
+        }
+
+        .feature-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-feature-icon {
+            display: grid;
+            place-items: center;
+            width: 45px;
+            height: 45px;
+            background: #1b2340;
+            border: 1px solid #2b3656;
+            border-radius: 12px;
+            color: #54e5ff;
+            font-size: 22px;
+        }
+
+        .feature-number {
+            color: #687590;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .dashboard-feature-content {
+            flex: 1;
+            margin-top: 23px;
+        }
+
+        .feature-small-label {
+            color: #54e5ff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .dashboard-feature-content h3 {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+
+        .dashboard-feature-content p {
+            margin: 0;
+        }
+
+        .dashboard-feature-action {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-top: 22px;
+            padding-top: 15px;
+            border-top: 1px solid #252e43;
+            color: #dfe6f8;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .dashboard-feature-action span {
+            color: #54e5ff;
+            font-size: 18px;
+        }
+
+        /* OUTPUTS */
+        .dashboard-output-section {
+            margin-top: 35px;
+        }
+
+        .output-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .output-card {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            min-width: 0;
+            padding: 19px;
+            background: #101626;
+            border: 1px solid #263149;
+            border-radius: 12px;
+        }
+
+        .output-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            flex-shrink: 0;
+            background: #1b2340;
+            border-radius: 10px;
+            color: #54e5ff;
+            font-size: 17px;
+            font-weight: 800;
+        }
+
+        .output-card strong,
+        .output-card small {
+            display: block;
+        }
+
+        .output-card strong {
+            font-size: 13px;
+        }
+
+        .output-card small {
+            margin-top: 6px;
+            color: #8f9bb3;
+            font-size: 11px;
+        }
+
+        /* TIP AND FOOTER */
+        .dashboard-tip {
+            display: flex;
+            align-items: flex-start;
+            gap: 17px;
+            margin-top: 30px;
+            padding: 23px;
+            background: #101626;
+            border: 1px solid #263149;
+            border-radius: 14px;
+        }
+
+        .tip-icon {
+            display: grid;
+            place-items: center;
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            background: #1b2340;
+            border-radius: 12px;
+            color: #54e5ff;
+            font-size: 22px;
+        }
+
+        .dashboard-tip > div:last-child > span {
+            color: #54e5ff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .dashboard-tip h3 {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .dashboard-tip p {
+            margin: 0;
+        }
+
+        .dashboard-footer {
+            margin-top: 35px;
+            padding: 20px 0 5px;
+            border-top: 1px solid #20283b;
+            color: #78859e;
+            font-size: 11px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 1000px) {
+            .sidebar {
+                flex-basis: 220px;
+                width: 220px;
+            }
+
+            .dashboard-main {
+                padding: 25px;
+            }
+
+            .dashboard-topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .dashboard-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-height: auto;
+                flex-basis: auto;
+                padding: 20px 14px;
+            }
+
+            .dashboard-logo {
+                margin-bottom: 22px;
+            }
+
+            .sidebar-section,
+            .sidebar-bottom {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .sidebar-title {
+                grid-column: 1 / -1;
+            }
+
+            .sidebar-bottom {
+                margin-top: 15px;
+                padding-top: 12px;
+            }
+
+            .dashboard-main {
+                width: 100%;
+                padding: 23px 16px;
+            }
+
+            .dashboard-grid,
+            .output-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-progress-card {
+                padding: 21px;
+            }
+
+            .progress-info h2 {
+                font-size: 19px;
+            }
+
+            .progress-percentage {
+                font-size: 28px;
+            }
+
+            .dashboard-topbar h1 {
+                font-size: 29px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <a href="{{ url_for('index') }}" class="dashboard-logo">
+            Persona<span>Forge</span><small>AI</small>
+        </a>
+
+        <nav class="sidebar-section">
+            <p class="sidebar-title">WORKSPACE</p>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="sidebar-link active">
+                <span>⌂</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('interview') }}" class="sidebar-link">
+                <span>✦</span> AI Interview
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="sidebar-link">
+                <span>◈</span> My Profile
+            </a>
+
+            <a href="{{ url_for('generator') }}" class="sidebar-link">
+                <span>◇</span> AI Generator
+            </a>
+
+            <a href="{{ url_for('brandmind') }}" class="sidebar-link">
+                <span>◫</span> BrandMind AI
+            </a>
+
+            <a href="{{ url_for('portfolio') }}" class="sidebar-link">
+                <span>⌁</span> Portfolio
+            </a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('settings') }}" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
+
+            <a href="{{ url_for('logout') }}"
+               class="sidebar-link logout-link">
+                <span>↪</span> Logout
+            </a>
+
+            <a href="{{ url_for('index') }}" class="sidebar-link">
+                <span>←</span> Back to Home
+            </a>
+        </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard-main">
+        <header class="dashboard-topbar">
+            <div>
+                <span class="dashboard-eyebrow">PERSONAFORGE WORKSPACE</span>
+                <h1>Build your professional <span>identity.</span></h1>
+                <p>
+                    Everything you need to create and manage your digital
+                    professional presence.
+                </p>
+            </div>
+
+            <div class="dashboard-profile">
+                <div class="profile-circle">PF</div>
+                <div>
+                    <strong>{{ session.get('user_email', 'Guest User') }}</strong>
+                    <small>Profile in progress</small>
+                </div>
+            </div>
+        </header>
+
+        <!-- FLASH MESSAGES -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="flash-message {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- PROFILE PROGRESS -->
+        <section class="profile-progress-card">
+            <div class="progress-info">
+                <div>
+                    <span class="card-label">YOUR PROFILE</span>
+                    <h2>Let's build your persona.</h2>
+                    <p>
+                        Complete the AI interview to start generating
+                        your professional identity.
+                    </p>
+                </div>
+                <div class="progress-percentage">0<span>%</span></div>
+            </div>
+
+            <div class="dashboard-progress-bar">
+                <div class="dashboard-progress-fill"></div>
+            </div>
+
+            <div class="progress-footer">
+                <span>Profile completion</span>
+                <a href="{{ url_for('interview') }}">Get started →</a>
+            </div>
+        </section>
+
+        <!-- FEATURES -->
+        <div class="dashboard-heading">
+            <span class="card-label">PERSONAFORGE ENGINE</span>
+            <h2>Start building</h2>
+        </div>
+
+        <section class="dashboard-grid">
+            <a href="{{ url_for('interview') }}" class="dashboard-feature">
+                <div class="feature-card-top">
+                    <div class="dashboard-feature-icon">✦</div>
+                    <span class="feature-number">01</span>
+                </div>
+                <div class="dashboard-feature-content">
+                    <span class="feature-small-label">START HERE</span>
+                    <h3>AI Career Interview</h3>
+                    <p>
+                        Tell PersonaForge about your education, skills,
+                        projects, experience and career goals.
+                    </p>
+                </div>
+                <div class="dashboard-feature-action">
+                    Begin interview <span>→</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('generator') }}" class="dashboard-feature">
+                <div class="feature-card-top">
+                    <div class="dashboard-feature-icon">◫</div>
+                    <span class="feature-number">02</span>
+                </div>
+                <div class="dashboard-feature-content">
+                    <span class="feature-small-label">AI CONTENT</span>
+                    <h3>Content Generator</h3>
+                    <p>
+                        Prepare professional resume, LinkedIn,
+                        GitHub and biography content.
+                    </p>
+                </div>
+                <div class="dashboard-feature-action">
+                    Generate content <span>→</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('brandmind') }}" class="dashboard-feature">
+                <div class="feature-card-top">
+                    <div class="dashboard-feature-icon">◈</div>
+                    <span class="feature-number">03</span>
+                </div>
+                <div class="dashboard-feature-content">
+                    <span class="feature-small-label">DESIGN INTELLIGENCE</span>
+                    <h3>BrandMind AI</h3>
+                    <p>
+                        Define the professional impression you want
+                        your portfolio to create.
+                    </p>
+                </div>
+                <div class="dashboard-feature-action">
+                    Explore BrandMind <span>→</span>
+                </div>
+            </a>
+
+            <a href="{{ url_for('portfolio') }}" class="dashboard-feature">
+                <div class="feature-card-top">
+                    <div class="dashboard-feature-icon">⌁</div>
+                    <span class="feature-number">04</span>
+                </div>
+                <div class="dashboard-feature-content">
+                    <span class="feature-small-label">DIGITAL PRESENCE</span>
+                    <h3>Portfolio Generator</h3>
+                    <p>
+                        Turn your professional identity into a
+                        responsive personal portfolio.
+                    </p>
+                </div>
+                <div class="dashboard-feature-action">
+                    Create portfolio <span>→</span>
+                </div>
+            </a>
+        </section>
+
+        <!-- OUTPUTS -->
+        <section class="dashboard-output-section">
+            <div class="dashboard-heading">
+                <span class="card-label">YOUR OUTPUTS</span>
+                <h2>Professional identity kit</h2>
+            </div>
+
+            <div class="output-grid">
+                <div class="output-card">
+                    <span class="output-icon">▤</span>
+                    <div>
+                        <strong>Resume</strong>
+                        <small>Use AI Generator to create</small>
+                    </div>
+                </div>
+
+                <div class="output-card">
+                    <span class="output-icon">in</span>
+                    <div>
+                        <strong>LinkedIn</strong>
+                        <small>Use AI Generator to create</small>
+                    </div>
+                </div>
+
+                <div class="output-card">
+                    <span class="output-icon">&lt;/&gt;</span>
+                    <div>
+                        <strong>GitHub README</strong>
+                        <small>Use AI Generator to create</small>
+                    </div>
+                </div>
+
+                <div class="output-card">
+                    <span class="output-icon">✎</span>
+                    <div>
+                        <strong>Biography</strong>
+                        <small>Use AI Generator to create</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TIP -->
+        <section class="dashboard-tip">
+            <div class="tip-icon">✦</div>
+            <div>
+                <span>PERSONAFORGE TIP</span>
+                <h3>Start with your story.</h3>
+                <p>
+                    The more PersonaForge understands your experience,
+                    the more useful your professional identity drafts
+                    can become.
+                </p>
+            </div>
+        </section>
+
+        <footer class="dashboard-footer">
+            PersonaForge AI · AI-Powered Personal Branding Platform
+        </footer>
+    </main>
+</div>
+</body>
+</html>

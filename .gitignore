@@ -1,0 +1,20 @@
+venv/
+venv copy/
+.venv/
+__pycache__/
+*.pyc
+.env
+.env copy
+personaforge.db
+personaforge copy.db
+app copy.py
+README copy.md
+requirements copy.txt
+config copy.py
+.gitignore copy
+templates copy/
+static copy/
+routes copy/
+services copy/
+database copy/
+exports copy/

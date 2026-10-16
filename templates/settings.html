@@ -1,0 +1,254 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Settings | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .settings-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 30px;
+            color: #f5f5f7;
+        }
+
+        .settings-heading {
+            margin-bottom: 28px;
+        }
+
+        .settings-heading h1 {
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .settings-heading p {
+            color: #a7a7b5;
+        }
+
+        .settings-card {
+            background: #171722;
+            border: 1px solid #303044;
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 22px;
+        }
+
+        .settings-card h2 {
+            font-size: 19px;
+            margin: 0 0 10px;
+        }
+
+        .settings-card > p {
+            color: #a7a7b5;
+            line-height: 1.6;
+        }
+
+        .settings-field {
+            margin-top: 22px;
+        }
+
+        .settings-field label {
+            display: block;
+            margin-bottom: 9px;
+            font-size: 14px;
+            color: #c9c9d6;
+        }
+
+        .settings-field input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px 15px;
+            border-radius: 10px;
+            border: 1px solid #38384d;
+            background: #101019;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        .settings-status {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 7px 12px;
+            border-radius: 20px;
+            background: #193d32;
+            color: #91edc4;
+            font-size: 13px;
+        }
+
+        .settings-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .settings-button {
+            display: inline-block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            background: linear-gradient(135deg, #8b5cf6, #6366f1);
+            color: white;
+        }
+
+        .settings-button.secondary {
+            background: #252536;
+            border: 1px solid #3b3b50;
+        }
+
+        .settings-note {
+            font-size: 13px;
+            color: #9292a5;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 700px) {
+            .settings-content {
+                padding: 20px 15px;
+            }
+
+            .settings-heading h1 {
+                font-size: 25px;
+            }
+
+            .settings-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="dashboard-sidebar sidebar">
+
+        <div class="sidebar-logo">
+            Persona<span>Forge</span><small>AI</small>
+        </div>
+
+        <nav class="sidebar-nav">
+            <p>WORKSPACE</p>
+
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('interview') }}">AI Interview</a>
+            <a href="{{ url_for('profile') }}">My Profile</a>
+            <a href="{{ url_for('generator') }}">AI Generator</a>
+            <a href="{{ url_for('brandmind') }}">BrandMind AI</a>
+            <a href="{{ url_for('portfolio') }}">Portfolio</a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('settings') }}"
+               class="active"
+               aria-current="page">Settings</a>
+
+            <a href="{{ url_for('index') }}">Back to Home</a>
+        </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="dashboard-main">
+
+        <div class="settings-content">
+
+            <header class="settings-heading">
+                <h1>Settings</h1>
+                <p>Manage your PersonaForge AI account information.</p>
+            </header>
+
+            <!-- ACCOUNT INFORMATION -->
+            <section class="settings-card">
+
+                <h2>Account Information</h2>
+                <p>Your account details currently registered with PersonaForge AI.</p>
+
+                <div class="settings-field">
+                    <label for="account-email">Registered Email</label>
+
+                    <input
+                        type="email"
+                        id="account-email"
+                        value="{{ user_email }}"
+                        readonly
+                    >
+                </div>
+
+                <span class="settings-status">
+                    Account information loaded
+                </span>
+
+                <p class="settings-note">
+                    Your registered email is displayed in read-only mode.
+                </p>
+
+            </section>
+
+            <!-- SECURITY -->
+            <section class="settings-card">
+
+                <h2>Security</h2>
+                <p>
+                    Keep your account secure by using a strong password
+                    and logging out when you finish.
+                </p>
+
+                <div class="settings-actions">
+                    <a class="settings-button secondary"
+                       href="{{ url_for('dashboard') }}">
+                        Back to Dashboard
+                    </a>
+                </div>
+
+                <p class="settings-note">
+                    Password changes are not enabled on this page yet.
+                </p>
+
+            </section>
+
+            <!-- NAVIGATION -->
+            <section class="settings-card">
+
+                <h2>Personal Branding</h2>
+                <p>
+                    Continue building your professional identity using
+                    your saved interview answers and brand preferences.
+                </p>
+
+                <div class="settings-actions">
+                    <a class="settings-button"
+                       href="{{ url_for('profile') }}">
+                        View My Profile
+                    </a>
+
+                    <a class="settings-button secondary"
+                       href="{{ url_for('brandmind') }}">
+                        BrandMind AI
+                    </a>
+
+                    <a class="settings-button secondary"
+                       href="{{ url_for('portfolio') }}">
+                        View Portfolio
+                    </a>
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

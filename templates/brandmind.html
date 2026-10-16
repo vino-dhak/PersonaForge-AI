@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BrandMind AI | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body.dashboard-page {
+            margin: 0;
+            background: #0b1020;
+            color: #f4f7ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .brandmind-content {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .brandmind-content h1 {
+            margin: 12px 0;
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        .brandmind-eyebrow {
+            color: #a99fff !important;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .brandmind-description {
+            margin: 12px 0 28px;
+            color: #a4aec5;
+            line-height: 1.8;
+        }
+
+        .brandmind-options {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 28px 0;
+        }
+
+        .brandmind-option {
+            min-width: 0;
+            padding: 24px;
+            border: 1px solid #29334d;
+            border-radius: 16px;
+            background: linear-gradient(145deg, #141c31, #0c1120);
+            transition: border-color .2s, transform .2s;
+        }
+
+        .brandmind-option:hover {
+            transform: translateY(-3px);
+            border-color: #8172ff;
+        }
+
+        .brandmind-option.brandmind-selected {
+            border: 1px solid #8172ff;
+            background: linear-gradient(145deg, #242044, #14162b);
+            box-shadow: 0 0 22px rgba(129, 114, 255, .12);
+        }
+
+        .brandmind-option h3 {
+            margin: 0 0 10px;
+            color: #f4f7ff;
+            font-size: 19px;
+        }
+
+        .brandmind-option p {
+            min-height: 46px;
+            color: #a4aec5;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .brandmind-option form {
+            margin-top: 18px;
+        }
+
+        .brandmind-option button {
+            width: 100%;
+            min-height: 44px;
+            padding: 10px 14px;
+            border: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #8172ff, #5948e8);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .brandmind-option button:hover {
+            filter: brightness(1.12);
+        }
+
+        .brandmind-option.brandmind-selected button {
+            background: #252047;
+            border: 1px solid #8172ff;
+        }
+
+        .brandmind-result {
+            padding: 26px;
+            border: 1px solid #303450;
+            border-radius: 16px;
+            background: #101629;
+        }
+
+        .brandmind-result h2 {
+            margin: 0 0 12px;
+            font-size: 1.5rem;
+        }
+
+        .brandmind-result p {
+            margin-top: 8px;
+            color: #b7bdd3;
+            line-height: 1.8;
+        }
+
+        .brandmind-status {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 8px 12px;
+            border: 1px solid #4b4279;
+            border-radius: 20px;
+            background: #211d3b;
+            color: #d3cbff;
+            font-size: 12px;
+        }
+
+        .brandmind-bottom-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #c6c0ff;
+            text-decoration: none;
+        }
+
+        @media (max-width: 1000px) {
+            .brandmind-options {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 720px) {
+            .brandmind-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-page">
+
+<div class="dashboard-layout">
+
+    <aside class="dashboard-sidebar sidebar">
+        <a href="{{ url_for('dashboard') }}"
+           class="sidebar-logo logo"
+           style="text-decoration:none;">
+            Persona<span>Forge</span><small>AI</small>
+        </a>
+
+        <p>WORKSPACE</p>
+
+        <nav>
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('interview') }}">AI Interview</a>
+            <a href="{{ url_for('profile') }}">My Profile</a>
+            <a href="{{ url_for('generator') }}">AI Generator</a>
+            <a class="active" href="{{ url_for('brandmind') }}">BrandMind AI</a>
+            <a href="{{ url_for('portfolio') }}">Portfolio</a>
+        </nav>
+
+        <div class="sidebar-bottom" style="margin-top:auto">
+            <a href="{{ url_for('settings') }}">Settings</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+            <a href="{{ url_for('index') }}">Back to Home</a>
+        </div>
+    </aside>
+
+    <main class="dashboard-main">
+
+        <section class="brandmind-content">
+
+            <p class="brandmind-eyebrow">
+                YOUR PERSONAL BRANDING STUDIO
+            </p>
+
+            <h1>BrandMind AI</h1>
+
+            <p class="brandmind-description">
+                Choose a visual identity that represents your professional
+                personality. Your selected style can be used by your portfolio.
+            </p>
+
+            {% set current_brand = selected_brand|default('', true) %}
+
+            <div class="brandmind-options">
+
+                {% for brand, description in [
+                    ('Professional', 'Clean, formal and career-focused.'),
+                    ('Creative', 'Expressive, colourful and original.'),
+                    ('Premium', 'Elegant, refined and sophisticated.'),
+                    ('Futuristic', 'Modern, bold and technology-inspired.'),
+                    ('Technical', 'Structured and developer-focused.')
+                ] %}
+
+                <article class="brandmind-option
+                    {% if current_brand == brand %}brandmind-selected{% endif %}">
+
+                    <h3>{{ brand }}</h3>
+                    <p>{{ description }}</p>
+
+                    <form method="POST"
+                          action="{{ url_for('brandmind') }}">
+
+                        <input type="hidden"
+                               name="brand_persona"
+                               value="{{ brand }}">
+
+                        <button type="submit">
+                            {% if current_brand == brand %}
+                                Selected ✓
+                            {% else %}
+                                Choose Style →
+                            {% endif %}
+                        </button>
+
+                    </form>
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+            <section class="brandmind-result">
+                <h2>Your Brand Identity</h2>
+
+                {% if current_brand %}
+                    <p>
+                        Your selected branding style is
+                        <strong>{{ current_brand }}</strong>.
+                    </p>
+
+                    <span class="brandmind-status">
+                        ✓ Selected style loaded
+                    </span>
+
+                    <p>
+                        Visit your Portfolio page to check how the selected
+                        style is displayed there.
+                    </p>
+
+                    <a href="{{ url_for('portfolio') }}"
+                       class="brandmind-bottom-link">
+                        View My Portfolio →
+                    </a>
+                {% else %}
+                    <p>
+                        You haven't selected a branding style yet.
+                        Choose one of the five styles above to get started.
+                    </p>
+                {% endif %}
+            </section>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="brandmind-bottom-link">
+                ← Back to Dashboard
+            </a>
+
+        </section>
+
+    </main>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,486 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Generator | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body.generator-page {
+            margin: 0;
+            background: #0b0d19;
+            color: #f4f5ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .generator-page .sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            width: 250px;
+            padding: 24px 16px;
+            overflow-y: auto;
+            background: #101322;
+            border-right: 1px solid #292d49;
+            z-index: 10;
+        }
+
+        .generator-page .dashboard-logo {
+            display: block;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+            margin: 10px 8px 35px;
+        }
+
+        .generator-page .dashboard-logo span { color: #a59aff; }
+        .generator-page .dashboard-logo small { font-size: 12px; }
+
+        .generator-page .sidebar-title {
+            color: #858ca8;
+            font-size: 12px;
+            margin: 20px 10px;
+        }
+
+        .generator-page .sidebar-link {
+            display: block;
+            padding: 13px 12px;
+            margin: 5px 0;
+            border-radius: 9px;
+            color: #c0c5dc;
+            text-decoration: none;
+        }
+
+        .generator-page .sidebar-link:hover,
+        .generator-page .sidebar-link.active {
+            color: #fff;
+            background: #282545;
+        }
+
+        .generator-page .sidebar-bottom { margin-top: 30px; }
+
+        .generator-page .generator-main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-height: 100vh;
+            padding: 35px;
+        }
+
+        .generator-page .eyebrow,
+        .generator-page .card-label {
+            color: #aaa1ff;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+        }
+
+        .generator-page .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .generator-page h1 {
+            color: #fff;
+            font-size: clamp(28px, 4vw, 40px);
+            margin: 12px 0;
+        }
+
+        .generator-page h1 span { color: #a59aff; }
+
+        .generator-page p {
+            color: #b7bdd3;
+            line-height: 1.8;
+        }
+
+        .generator-page .profile-link,
+        .generator-page .back-link {
+            color: #d5d0ff;
+            text-decoration: none;
+        }
+
+        .generator-page .intro-card,
+        .generator-page .generated-card,
+        .generator-page .info-card {
+            background: #15182b;
+            border: 1px solid #303450;
+            border-radius: 16px;
+            padding: 25px;
+        }
+
+        .generator-page .intro-card { margin-bottom: 28px; }
+        .generator-page h2 { color: #fff; margin: 12px 0; }
+
+        .generator-page .generator-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+
+        .generator-page .generator-card {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            padding: 24px;
+            color: inherit;
+            text-decoration: none;
+            background: #15182b;
+            border: 1px solid #303450;
+            border-radius: 16px;
+            transition: transform .2s, border-color .2s;
+        }
+
+        .generator-page .generator-card:hover {
+            transform: translateY(-3px);
+            border-color: #8275ff;
+        }
+
+        .generator-page .feature-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .generator-page .feature-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            border-radius: 13px;
+            background: #292747;
+            color: #c7c0ff;
+            font-weight: bold;
+            font-size: 19px;
+        }
+
+        .generator-page .feature-number {
+            color: #8e94ae;
+            font-size: 13px;
+        }
+
+        .generator-page .feature-label {
+            display: block;
+            margin-top: 22px;
+            color: #aaa1ff;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1.3px;
+        }
+
+        .generator-page .generator-card h3 {
+            color: #fff;
+            font-size: 20px;
+            margin: 10px 0;
+        }
+
+        .generator-page .generator-card p { margin: 0 0 20px; }
+
+        .generator-page .feature-action {
+            display: flex;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 14px;
+            color: #bcb4ff;
+            border-top: 1px solid #303450;
+        }
+
+        .generator-page .generated-card {
+            margin-top: 30px;
+            scroll-margin-top: 25px;
+        }
+
+        .generator-page .generated-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #101322;
+            border: 1px solid #303450;
+            border-radius: 12px;
+        }
+
+        .generator-page .generated-section h3 {
+            color: #c4bdff;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        .generator-page .generated-section p {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            margin-bottom: 0;
+        }
+
+        .generator-page .notice {
+            padding: 20px;
+            margin: 25px 0;
+            border: 1px solid #49416f;
+            background: #1a1930;
+            border-radius: 12px;
+        }
+
+        .generator-page .button {
+            display: inline-block;
+            padding: 12px 17px;
+            margin-top: 10px;
+            border: 0;
+            border-radius: 8px;
+            background: #7569ff;
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .generator-page .secondary-button {
+            background: #292747;
+            border: 1px solid #45416e;
+        }
+
+        .generator-page .info-card { margin-top: 28px; }
+        .generator-page .back-link { display: inline-block; margin-top: 24px; }
+
+        .generator-page .copy-status {
+            color: #bdb4ff;
+            margin-left: 10px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 850px) {
+            .generator-page .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .generator-page .generator-main {
+                margin-left: 0;
+                width: 100%;
+                padding: 24px 18px;
+            }
+
+            .generator-page .generator-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body class="generator-page">
+
+    <aside class="sidebar">
+        <a href="{{ url_for('dashboard') }}" class="dashboard-logo">
+            Persona<span>Forge</span> <small>AI</small>
+        </a>
+
+        <p class="sidebar-title">WORKSPACE</p>
+
+        <a href="{{ url_for('dashboard') }}" class="sidebar-link">⌂ Dashboard</a>
+        <a href="{{ url_for('interview') }}" class="sidebar-link">✦ AI Interview</a>
+        <a href="{{ url_for('profile') }}" class="sidebar-link">◈ My Profile</a>
+        <a href="{{ url_for('generator') }}" class="sidebar-link active">◇ AI Generator</a>
+        <a href="{{ url_for('brandmind') }}" class="sidebar-link">◫ BrandMind AI</a>
+        <a href="{{ url_for('portfolio') }}" class="sidebar-link">⌁ Portfolio</a>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('settings') }}" class="sidebar-link">⚙ Settings</a>
+            <a href="{{ url_for('logout') }}" class="sidebar-link">↪ Logout</a>
+            <a href="{{ url_for('index') }}" class="sidebar-link">← Back to Home</a>
+        </div>
+    </aside>
+
+    <main class="generator-main">
+
+        <header class="page-header">
+            <div>
+                <span class="eyebrow">PERSONAFORGE AI GENERATOR</span>
+                <h1>Turn your story into <span>opportunity.</span></h1>
+                <p>Transform your interview answers into professional career content.</p>
+            </div>
+            <a href="{{ url_for('profile') }}" class="profile-link">← My Profile</a>
+        </header>
+
+        {% if message %}
+        <section class="notice">
+            <h3>Complete your profile first</h3>
+            <p>{{ message }}</p>
+            <a href="{{ url_for('interview') }}" class="button">Start AI Interview →</a>
+        </section>
+        {% endif %}
+
+        <section class="intro-card">
+            <span class="card-label">AI CONTENT ENGINE</span>
+            <h2>Your professional content kit</h2>
+            <p>Choose a format below to turn your PersonaForge profile into professional content.</p>
+        </section>
+
+        <section class="generator-grid">
+
+            <a href="{{ url_for('generate_content', content_type='resume') }}"
+               class="generator-card">
+                <div class="feature-top">
+                    <div class="feature-icon">▤</div>
+                    <span class="feature-number">01</span>
+                </div>
+                <span class="feature-label">CAREER DOCUMENT</span>
+                <h3>Professional Resume</h3>
+                <p>Generate a structured resume from your interview answers.</p>
+                <div class="feature-action">Generate <span>→</span></div>
+            </a>
+
+            <a href="{{ url_for('generate_content', content_type='linkedin') }}"
+               class="generator-card">
+                <div class="feature-top">
+                    <div class="feature-icon">in</div>
+                    <span class="feature-number">02</span>
+                </div>
+                <span class="feature-label">PROFESSIONAL PROFILE</span>
+                <h3>LinkedIn About</h3>
+                <p>Create a professional LinkedIn summary from your profile.</p>
+                <div class="feature-action">Generate <span>→</span></div>
+            </a>
+
+            <a href="{{ url_for('generate_content', content_type='github') }}"
+               class="generator-card">
+                <div class="feature-top">
+                    <div class="feature-icon">◇</div>
+                    <span class="feature-number">03</span>
+                </div>
+                <span class="feature-label">DEVELOPER IDENTITY</span>
+                <h3>GitHub README</h3>
+                <p>Generate a professional developer profile README.</p>
+                <div class="feature-action">Generate <span>→</span></div>
+            </a>
+
+            <a href="{{ url_for('generate_content', content_type='bio') }}"
+               class="generator-card">
+                <div class="feature-top">
+                    <div class="feature-icon">✦</div>
+                    <span class="feature-number">04</span>
+                </div>
+                <span class="feature-label">PERSONAL BRAND</span>
+                <h3>Professional Biography</h3>
+                <p>Create a concise biography from your professional story.</p>
+                <div class="feature-action">Generate <span>→</span></div>
+            </a>
+
+        </section>
+
+        {% if generated_content %}
+        <section id="generated-content" class="generated-card">
+            <span class="card-label">GENERATED CONTENT</span>
+            <h2>{{ generated_content.heading }}</h2>
+            <p>Created using the information available in your interview.</p>
+
+            {% for section_title, section_content in generated_content.sections %}
+            <div class="generated-section">
+                <h3>{{ section_title }}</h3>
+                <p class="generated-text">{{ section_content }}</p>
+            </div>
+            {% endfor %}
+
+            <button type="button" class="button" onclick="copyGeneratedContent()">
+                Copy All Content
+            </button>
+            <span id="copy-status" class="copy-status" aria-live="polite"></span>
+
+            <a href="{{ url_for('generator') }}" class="button secondary-button">
+                ← Generate Another
+            </a>
+        </section>
+        {% endif %}
+
+        <section class="info-card">
+            <span class="card-label">PERSONAFORGE AI</span>
+
+            {% if generator_type == "resume" %}
+                <h2>Professional Resume</h2>
+                <p>Organize your education, skills, projects, experience and career goals into a resume.</p>
+            {% elif generator_type == "linkedin" %}
+                <h2>LinkedIn About</h2>
+                <p>Present your professional story, skills and career direction in a LinkedIn-friendly format.</p>
+            {% elif generator_type == "github" %}
+                <h2>GitHub README</h2>
+                <p>Highlight your developer background, skills and projects.</p>
+            {% elif generator_type == "bio" %}
+                <h2>Professional Biography</h2>
+                <p>Introduce your professional background, strengths and career goals.</p>
+            {% else %}
+                <h2>One profile. Multiple possibilities.</h2>
+                <p>Select a content type above to generate content from your interview answers.</p>
+            {% endif %}
+        </section>
+
+        <a href="{{ url_for('dashboard') }}" class="back-link">← Back to Dashboard</a>
+
+    </main>
+
+    <script>
+        function copyGeneratedContent() {
+            const sections = document.querySelectorAll(
+                "#generated-content .generated-section"
+            );
+
+            const content = Array.from(sections).map(section => {
+                const heading = section.querySelector("h3")?.innerText || "";
+                const text = section.querySelector("p")?.innerText || "";
+                return heading + "\n" + text;
+            }).join("\n\n");
+
+            const status = document.getElementById("copy-status");
+
+            if (!content) {
+                status.textContent = "No content available to copy.";
+                return;
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(content)
+                    .then(() => {
+                        status.textContent = "Content copied!";
+                    })
+                    .catch(() => fallbackCopy(content, status));
+            } else {
+                fallbackCopy(content, status);
+            }
+        }
+
+        function fallbackCopy(content, status) {
+            const textarea = document.createElement("textarea");
+            textarea.value = content;
+            textarea.style.position = "fixed";
+            textarea.style.opacity = "0";
+            document.body.appendChild(textarea);
+            textarea.select();
+
+            try {
+                const copied = document.execCommand("copy");
+                status.textContent = copied
+                    ? "Content copied!"
+                    : "Copy failed. Please select and copy manually.";
+            } catch (error) {
+                status.textContent = "Copy failed. Please select and copy manually.";
+            }
+
+            textarea.remove();
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const result = document.getElementById("generated-content");
+            if (result) {
+                result.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

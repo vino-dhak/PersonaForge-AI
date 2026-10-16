@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Generated Content | PersonaForge AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="dashboard-page">
+
+    <aside class="sidebar">
+
+        <a href="/dashboard" class="dashboard-logo">
+            Persona<span>Forge</span>
+            <small>AI</small>
+        </a>
+
+        <div class="sidebar-section">
+
+            <p class="sidebar-title">
+                WORKSPACE
+            </p>
+
+            <a href="/dashboard" class="sidebar-link">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/interview" class="sidebar-link">
+                <span>✦</span>
+                AI Interview
+            </a>
+
+            <a href="/profile" class="sidebar-link">
+                <span>◈</span>
+                My Profile
+            </a>
+
+            <a href="/generator" class="sidebar-link active">
+                <span>◇</span>
+                AI Generator
+            </a>
+
+            <a href="/brandmind" class="sidebar-link">
+                <span>◫</span>
+                BrandMind AI
+            </a>
+
+            <a href="/portfolio" class="sidebar-link">
+                <span>⌁</span>
+                Portfolio
+            </a>
+
+        </div>
+
+        <div class="sidebar-bottom">
+
+            <a href="#" class="sidebar-link">
+                <span>⚙</span>
+                Settings
+            </a>
+
+            <a href="/" class="sidebar-link">
+                <span>←</span>
+                Back to Home
+            </a>
+
+        </div>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-topbar">
+
+            <div>
+
+                <span class="dashboard-eyebrow">
+                    PERSONAFORGE AI • GENERATED CONTENT
+                </span>
+
+                <h1>
+                    Your professional
+                    <span>content.</span>
+                </h1>
+
+                <p>
+                    PersonaForge has transformed your
+                    interview information into professional content.
+                </p>
+
+            </div>
+
+            <a href="/generator"
+               class="back-dashboard">
+
+                ← AI Generator
+
+            </a>
+
+        </header>
+
+
+        <section class="profile-progress-card">
+
+            <div class="progress-info">
+
+                <div>
+
+                    <span class="card-label">
+                        GENERATED CONTENT
+                    </span>
+
+                    <h2>
+                        {{ content_title }}
+                    </h2>
+
+                    <p>
+                        Generated using your PersonaForge
+                        professional profile.
+                    </p>
+
+                </div>
+
+                <div class="progress-percentage">
+                    ✦
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="dashboard-tip">
+
+            <div class="tip-icon">
+                ✦
+            </div>
+
+            <div style="width: 100%;">
+
+                <span>
+                    PERSONAFORGE AI
+                </span>
+
+                <h3>
+                    {{ content_title }}
+                </h3>
+
+                <div class="portfolio-preview">
+
+                    {{ generated_content }}
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <br>
+
+
+        <a href="/generator"
+           class="secondary-button">
+
+            ← Generate Another
+
+        </a>
+
+
+        <a href="/portfolio"
+           class="primary-button">
+
+            View Portfolio
+            <span>→</span>
+
+        </a>
+
+    </main>
+
+</body>
+
+</html>

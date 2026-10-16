@@ -1,0 +1,507 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Interview | PersonaForge AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Interview page layout fallback */
+        body.interview-page {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+            background: #f7f8fc;
+            color: #202438;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .interview-page *,
+        .interview-page *::before,
+        .interview-page *::after {
+            box-sizing: border-box;
+        }
+
+        .interview-page .sidebar {
+            width: 260px;
+            min-height: 100vh;
+            padding: 28px 18px;
+            background: #17182b;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .interview-page .dashboard-logo {
+            color: #fff;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .interview-page .dashboard-logo span,
+        .interview-page .dashboard-logo small {
+            color: #a99bff;
+        }
+
+        .interview-page .sidebar-title {
+            margin: 0 0 12px;
+            color: #a5a7bf;
+            font-size: 11px;
+            letter-spacing: 1.5px;
+        }
+
+        .interview-page .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            margin: 4px 0;
+            border-radius: 9px;
+            color: #dfe0f0;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .interview-page .sidebar-link:hover,
+        .interview-page .sidebar-link.active {
+            color: #fff;
+            background: #353450;
+        }
+
+        .interview-page .sidebar-bottom {
+            margin-top: auto;
+        }
+
+        .interview-page .interview-main {
+            width: 100%;
+            min-width: 0;
+            max-width: 1200px;
+            padding: 42px clamp(20px, 5vw, 64px);
+            margin: 0 auto;
+        }
+
+        .interview-page .interview-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .interview-page .dashboard-eyebrow,
+        .interview-page .question-label {
+            color: #7565d8;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+        }
+
+        .interview-page .interview-top h1 {
+            margin: 12px 0;
+            font-size: clamp(30px, 4vw, 44px);
+            line-height: 1.15;
+        }
+
+        .interview-page .interview-top h1 span {
+            color: #7865df;
+        }
+
+        .interview-page .interview-top p,
+        .interview-page .question-description {
+            color: #70748b;
+            line-height: 1.7;
+        }
+
+        .interview-page .back-dashboard {
+            flex-shrink: 0;
+            color: #6658c9;
+            text-decoration: none;
+        }
+
+        .interview-page .interview-progress {
+            margin-bottom: 24px;
+            padding: 20px 24px;
+            background: #fff;
+            border: 1px solid #e8e8f1;
+            border-radius: 14px;
+        }
+
+        .interview-page .interview-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .interview-page .interview-progress-header > div:first-child {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .interview-page .interview-progress-header span {
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: #777b91;
+        }
+
+        .interview-page .interview-progress-number {
+            color: #7565d8;
+            font-weight: 700;
+        }
+
+        .interview-page .interview-progress-bar {
+            height: 7px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #eceaf8;
+        }
+
+        .interview-page .interview-progress-fill {
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, #7463d7, #a28cf6);
+        }
+
+        .interview-page .question-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 22px;
+            padding: clamp(22px, 4vw, 38px);
+            background: #fff;
+            border: 1px solid #e8e8f1;
+            border-radius: 18px;
+            box-shadow: 0 12px 35px rgba(32, 36, 56, 0.05);
+        }
+
+        .interview-page .question-number {
+            display: grid;
+            place-items: center;
+            flex: 0 0 52px;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: #f0edff;
+            color: #7565d8;
+            font-weight: 700;
+        }
+
+        .interview-page .question-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .interview-page .question-content h2 {
+            margin: 14px 0 10px;
+            font-size: clamp(23px, 3vw, 30px);
+            color: #202438;
+        }
+
+        .interview-page .question-content form {
+            margin-top: 26px;
+        }
+
+        .interview-page #answer {
+            display: block;
+            width: 100%;
+            min-height: 160px;
+            margin-top: 10px;
+            padding: 15px;
+            resize: vertical;
+            border: 1px solid #dcddec;
+            border-radius: 10px;
+            outline: none;
+            background: #fff;
+            color: #202438;
+            font: inherit;
+        }
+
+        .interview-page #answer:focus {
+            border-color: #7865df;
+            box-shadow: 0 0 0 3px rgba(120, 101, 223, 0.12);
+        }
+
+        .interview-page .answer-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 9px;
+            color: #777b91;
+            font-size: 12px;
+        }
+
+        .interview-page .question-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 14px;
+            margin-top: 24px;
+        }
+
+        .interview-page .primary-button,
+        .interview-page .secondary-button {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            min-height: 44px;
+            padding: 12px 20px;
+            border: 0;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .interview-page .primary-button {
+            background: #7565d8;
+            color: #fff;
+        }
+
+        .interview-page .primary-button:hover {
+            background: #6252c5;
+        }
+
+        .interview-page .secondary-button {
+            border: 1px solid #dedfee;
+            background: #fff;
+            color: #454860;
+        }
+
+        .interview-page .interview-ai-tip {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            padding: 22px;
+            border: 1px solid #e6e1ff;
+            border-radius: 14px;
+            background: #f0edff;
+        }
+
+        .interview-page .ai-tip-icon {
+            display: grid;
+            place-items: center;
+            flex: 0 0 38px;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #fff;
+            color: #7565d8;
+        }
+
+        .interview-page .interview-ai-tip span {
+            color: #7565d8;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .interview-page .interview-ai-tip h3 {
+            margin: 8px 0;
+        }
+
+        .interview-page .interview-ai-tip p {
+            margin-bottom: 0;
+            color: #626780;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 760px) {
+            body.interview-page {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .interview-page .sidebar {
+                width: 100%;
+                min-height: auto;
+                padding: 18px;
+            }
+
+            .interview-page .sidebar-bottom {
+                margin-top: 0;
+            }
+
+            .interview-page .interview-main {
+                padding: 25px 16px;
+            }
+
+            .interview-page .interview-top {
+                flex-direction: column;
+            }
+
+            .interview-page .question-card {
+                flex-direction: column;
+            }
+
+            .interview-page .question-number {
+                flex-basis: 44px;
+                width: 44px;
+                height: 44px;
+            }
+
+            .interview-page .question-actions {
+                align-items: stretch;
+                flex-direction: column;
+            }
+
+            .interview-page .answer-footer {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+
+<body class="interview-page">
+
+    <aside class="sidebar">
+        <a href="{{ url_for('dashboard') }}" class="dashboard-logo">
+            Persona<span>Forge</span> <small>AI</small>
+        </a>
+
+        <div class="sidebar-section">
+            <p class="sidebar-title">WORKSPACE</p>
+
+            <a href="{{ url_for('dashboard') }}" class="sidebar-link">
+                <span>⌂</span> Dashboard
+            </a>
+
+            <a href="{{ url_for('interview') }}" class="sidebar-link active">
+                <span>✦</span> AI Interview
+            </a>
+
+            <a href="{{ url_for('profile') }}" class="sidebar-link">
+                <span>◈</span> My Profile
+            </a>
+
+            <a href="{{ url_for('generator') }}" class="sidebar-link">
+                <span>◇</span> AI Generator
+            </a>
+
+            <a href="{{ url_for('brandmind') }}" class="sidebar-link">
+                <span>◫</span> BrandMind AI
+            </a>
+
+            <a href="{{ url_for('portfolio') }}" class="sidebar-link">
+                <span>⌁</span> Portfolio
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="{{ url_for('settings') }}" class="sidebar-link">
+                <span>⚙</span> Settings
+            </a>
+
+            <a href="{{ url_for('logout') }}" class="sidebar-link logout-link">
+                <span>↪</span> Logout
+            </a>
+
+            <a href="{{ url_for('index') }}" class="sidebar-link">
+                <span>←</span> Back to Home
+            </a>
+        </div>
+    </aside>
+
+    <main class="interview-main">
+        <div class="interview-top">
+            <div>
+                <span class="dashboard-eyebrow">PERSONAFORGE AI INTERVIEW</span>
+                <h1>Let's understand <span>you.</span></h1>
+                <p>
+                    Answer a few questions about your background, skills and goals.
+                    PersonaForge will use your answers to build your professional identity.
+                </p>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="back-dashboard">
+                ← Dashboard
+            </a>
+        </div>
+
+        <section class="interview-progress">
+            <div class="interview-progress-header">
+                <div>
+                    <span>INTERVIEW PROGRESS</span>
+                    <strong>Question {{ current }} of {{ total }}</strong>
+                </div>
+                <div class="interview-progress-number">{{ percentage }}%</div>
+            </div>
+
+            <div class="interview-progress-bar">
+                <div class="interview-progress-fill"
+                     style="width: {{ percentage }}%;"></div>
+            </div>
+        </section>
+
+        <section class="question-card">
+            <div class="question-number">{{ "%02d"|format(current) }}</div>
+
+            <div class="question-content">
+                <span class="question-label">{{ question.label }}</span>
+                <h2>{{ question.title }}</h2>
+                <p class="question-description">{{ question.description }}</p>
+
+                <form method="POST" action="{{ url_for('interview') }}">
+                    <label for="answer">Your answer</label>
+
+                    <textarea
+                        id="answer"
+                        name="answer"
+                        maxlength="1000"
+                        placeholder="Write your answer here..."
+                        required></textarea>
+
+                    <div class="answer-footer">
+                        <span>Write naturally. There is no wrong answer.</span>
+                        <span class="character-count">0 / 1000</span>
+                    </div>
+
+                    <div class="question-actions">
+                        <a href="{{ url_for('dashboard') }}"
+                           class="secondary-button">Save &amp; Exit</a>
+
+                        <button type="submit" class="primary-button">
+                            {% if current == total %}
+                                Finish Interview
+                            {% else %}
+                                Continue →
+                            {% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="interview-ai-tip">
+            <div class="ai-tip-icon">✦</div>
+            <div>
+                <span>PERSONAFORGE AI</span>
+                <h3>Don't try to sound professional.</h3>
+                <p>
+                    Just be yourself. PersonaForge will transform your natural
+                    answers into professional content later.
+                </p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const answerBox = document.getElementById("answer");
+        const counter = document.querySelector(".character-count");
+
+        if (answerBox && counter) {
+            answerBox.addEventListener("input", function () {
+                counter.textContent = this.value.length + " / 1000";
+            });
+        }
+    </script>
+
+</body>
+</html>
